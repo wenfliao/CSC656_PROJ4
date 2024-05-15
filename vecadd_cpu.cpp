@@ -2,6 +2,8 @@
 #include <math.h>
 #include <chrono>
 #include <iomanip>
+// Code from the CUDA Blog
+
 // function to add the elements of two arrays
 void add(int n, float *x, float *y)
 {
