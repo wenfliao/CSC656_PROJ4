@@ -1,4 +1,4 @@
-include <iostream>
+#include <iostream>
 #include <math.h>
 // Code from the CUDA Blog
 
