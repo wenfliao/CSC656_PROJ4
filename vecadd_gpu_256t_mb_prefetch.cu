@@ -1,5 +1,8 @@
 #include <iostream>
 #include <math.h>
+
+// Code from the CUDA Blog
+
 // Kernel function to add the elements of two arrays
 __global__
 void add(int n, float *x, float *y)
@@ -19,19 +22,20 @@ int main(void)
   cudaMallocManaged(&x, N*sizeof(float));
   cudaMallocManaged(&y, N*sizeof(float));
 
-  int deviceID=0;
-
-  cudaMemPrefetchAsync((void *)x , N*sizeof(float), deviceID);
-  cudaMemPrefetchAsync((void *)y , N*sizeof(float), deviceID);
-
   // initialize x and y arrays on the host
   for (int i = 0; i < N; i++) {
     x[i] = 1.0f;
     y[i] = 2.0f;
   }
+  
+  int deviceID=0;
+  cudaMemPrefetchAsync((void *)x, N*sizeof(float), deviceID);
+  cudaMemPrefetchAsync((void *)y, N*sizeof(float), deviceID);
 
   int blockSize = 256;
   int numBlocks = (N + blockSize - 1) / blockSize;
+  int numTotalThreads = numBlocks*blockSize;
+  std::cout << "number of blocks: " << numBlocks << " number threads/block: "<< blockSize << " number of total threads: " << numTotalThreads <<std::endl;
   add<<<numBlocks, blockSize>>>(N, x, y);
 
   // Wait for GPU to finish before accessing on host
